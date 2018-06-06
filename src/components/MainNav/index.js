@@ -30,7 +30,7 @@ export default class extends React.Component {
                           <span className="menu-title">排班管理</span>
                         </NavLink>
                       </li>
-                      <li>
+                      {/* <li>
                         <NavLink to="/inventorySync" activeClassName="active">
                           <i className="demo-pli-home" />
                           <span className="menu-title">排班规则</span>
@@ -41,11 +41,47 @@ export default class extends React.Component {
                           <i className="demo-pli-home" />
                           <span className="menu-title">排班记录</span>
                         </NavLink>
-                      </li>
+                      </li> */}
                       <li>
-                        <NavLink to="/inventorySync" activeClassName="active">
+                        <NavLink to="/registerHistory/list" activeClassName="active">
                           <i className="demo-pli-home" />
                           <span className="menu-title">挂号记录</span>
+                        </NavLink>
+                      </li>
+                    </ul>
+                  </li>
+                  <li>
+                    <a href="javascript:void(0)">
+                      <i className="demo-pli-home" />
+                      <span className="menu-title">订单管理</span>
+                      <i className="arrow" />
+                    </a>
+                    <ul className="collapse">
+                      <li>
+                        <NavLink to="/order/orders" activeClassName="active">
+                          <i className="demo-pli-home" />
+                          <span className="menu-title">订单列表</span>
+                        </NavLink>
+                      </li>
+                      <li>
+                        <NavLink to="/order/paymentHistory" activeClassName="active">
+                          <i className="demo-pli-home" />
+                          <span className="menu-title">支付记录</span>
+                        </NavLink>
+                      </li>
+                    </ul>
+                  </li>
+                  <li>
+                    <a href="javascript:void(0)">
+                      <i className="demo-pli-home" />
+                      <span className="menu-title">处方管理</span>
+                      <i className="arrow" />
+                    </a>
+                    <ul className="collapse">
+                      <li>
+                        <NavLink to="/prescription/list" activeClassName="active">
+                          <i className="demo-pli-home" />
+                          <span className="menu-title">处方列表</span>
                         </NavLink>
                       </li>
                     </ul>
@@ -56,11 +92,6 @@ export default class extends React.Component {
                       <span className="menu-title">医院网点</span>
                       {/* <i className="arrow" /> */}
                     </NavLink>
-                    {/* <ul className="collapse">
-                      <li><Link to="/crawler/overview">概况</Link></li>
-                      <li><a href="dashboard-2.html">新建爬虫</a></li>
-                      <li><a href="dashboard-3.html">爬虫列表</a></li>
-                    </ul> */}
                   </li>
                   <li>
                     <NavLink to="/doctors" activeClassName="active">
@@ -69,10 +100,25 @@ export default class extends React.Component {
                     </NavLink>
                   </li>
                   <li>
-                    <NavLink to="/users" activeClassName="active">
+                    <a href="javascript:void(0)">
                       <i className="demo-pli-home" />
-                      <span className="menu-title">用户管理</span>
-                    </NavLink>
+                      <span className="menu-title">用户</span>
+                      <i className="arrow" />
+                    </a>
+                    <ul className="collapse">
+                      <li>
+                        <NavLink to="/users" activeClassName="active">
+                          <i className="demo-pli-home" />
+                          <span className="menu-title">用户管理</span>
+                        </NavLink>
+                      </li>
+                      <li>
+                        <NavLink to="/cases" activeClassName="active">
+                          <i className="demo-pli-home" />
+                          <span className="menu-title">病例管理</span>
+                        </NavLink>
+                      </li>
+                    </ul>
                   </li>
                 </ul>
               </div>

@@ -12,11 +12,14 @@ class Comp extends React.Component {
     columns: PropTypes.arrayOf(PropTypes.object).isRequired,
     url: PropTypes.string.isRequired,
     rowKey: PropTypes.oneOfType([PropTypes.string, PropTypes.func]).isRequired,
-    params: PropTypes.object,
+    params: PropTypes.object, //eslint-disable-line
     onLoad: PropTypes.func,
-    fetchOptions: PropTypes.object,
+    fetchOptions: PropTypes.object, //eslint-disable-line
     tools: PropTypes.arrayOf(PropTypes.element),
     refreshable: PropTypes.bool,
+    filterFunc: PropTypes.func,
+    pagination: PropTypes.bool,
+    autoLoad: PropTypes.bool,
   };
   static defaultProps = {
     params: {},
@@ -24,6 +27,9 @@ class Comp extends React.Component {
     fetchOptions: {},
     tools: [],
     refreshable: false,
+    pagination: false,
+    autoLoad: false,
+    filterFunc: res => res,
   };
   state = {
     loading: false,
@@ -31,16 +37,40 @@ class Comp extends React.Component {
     pagination: {},
   };
   componentDidMount() {
-    this.fetch();
+    const { autoLoad } = this.props;
+    if (autoLoad) {
+      this.fetch();
+    }
   }
-  reload(opt) {
+  getTools() {
+    const { tools, refreshable } = this.props;
+    const { loading } = this.props; //eslint-disable-line
+    const tTools = [].concat(tools);
+    if (!tools.length && !refreshable) {
+      return null;
+    }
+    if (refreshable) {
+      tTools.push(<Button loading={loading} onClick={this.reload}><Icon type="reload" /></Button>);
+    }
+
+    return (
+      <p>
+        {
+          // React.cloneElement 可以复制一个组件，以便修改属性
+          // eslint-disable-next-line
+          tTools.map((item, key) => React.cloneElement(item, { key })) 
+        }
+      </p>
+    );
+  }
+  reload = (opt) => {
     this.fetch(opt);
   }
-  async fetch({ current, pageSize, params } = {}) {
+  fetch = async ({ current, pageSize, params } = {}) => {
     this.setState({
       loading: true,
     });
-    const { url } = this.props;
+    const { url, filterFunc } = this.props;
     try {
       const res = await bFetch(url, {
         params: {
@@ -51,16 +81,20 @@ class Comp extends React.Component {
         },
         ...this.props.fetchOptions,
       });
-      const { data, pagination } = res.results || {};
-      this.setState({
+      const resF = await filterFunc(res);
+      const { data, pagination } = resF.results || {};
+      const state = {
         loading: false,
         data,
-        pagination: {
+      };
+      if (this.props.pagination) {
+        state.pagination = {
           current: pagination.currentPage,
           total: pagination.totalCount,
-        },
-      });
-      this.props.onLoad(null, res);
+        };
+      }
+      this.setState(state);
+      this.props.onLoad(null, resF);
     } catch (e) {
       this.setState({
         loading: false,
@@ -71,31 +105,15 @@ class Comp extends React.Component {
   handleTableChange = (pagination) => {
     this.fetch(pagination);
   };
-  getTools() {
-    const { tools, refreshable } = this.props;
-    const { loading } = this.props;
-    const tTools = [].concat(tools);
-    if (!tools.length && !refreshable) {
-      return null;
-    }
-    if (refreshable) {
-      tTools.push(<Button loading={loading} onClick={this.reload}>
-        <Icon type="reload" />
-                  </Button>);
-    }
 
-    return (
-      <p>
-        {tTools.map((item, key) =>
-          // React.cloneElement 可以复制一个组件，以便修改属性
-           React.cloneElement(item, { key }))}
-      </p>
-    );
-  }
   render() {
     const { columns, rowKey } = this.props;
-    const { loading, data, pagination } = this.state;
-    console.trace('data', data);
+    const { loading, data } = this.state;
+    let { pagination } = this.props;
+    if (pagination) {
+      pagination = this.state.pagination; //eslint-disable-line
+    }
+    console.log('table data', data);
     return (
       <div>
         {this.getTools()}

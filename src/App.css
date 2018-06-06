@@ -46,3 +46,7 @@ a{
 #content-container{
   min-height: 100vh;
 }
+
+#navbar {
+  z-index: 100;
+}

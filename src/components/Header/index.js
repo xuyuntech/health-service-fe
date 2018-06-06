@@ -10,7 +10,7 @@ export default class extends React.Component {
             <a href="index.html" className="navbar-brand">
               <img src={Logo} alt="Nifty Logo" className="brand-icon" />
               <div className="brand-title">
-                <span className="brand-text">Nifty</span>
+                <span className="brand-text">HealthService</span>
               </div>
             </a>
           </div>

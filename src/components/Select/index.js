@@ -19,6 +19,7 @@ const propTypes = {
 };
 
 export default class extends React.Component {
+  static Option = Option;
   static propTypes = propTypes;
   static defaultProps = {
     method: 'get',
@@ -27,13 +28,13 @@ export default class extends React.Component {
     onChange: NOOP,
     onSuccess: NOOP,
     onError: NOOP,
-    items: [],
+    items: null,
   };
 
   constructor(props) {
     super(props);
     this.state = {
-      items: props.items || [],
+      items: props.items,
     };
   }
   async componentDidMount() {
@@ -58,12 +59,18 @@ export default class extends React.Component {
     }
   }
   render() {
-    const { ...props } = this.props;
-    const { loading, items } = this.state;
+    const { children, ...props } = this.props;
+    const { items } = this.state;
+    if (!items) {
+      return (
+        <Select {...omit(props, Object.keys(propTypes))} onChange={this.props.onChange}>
+          {children}
+        </Select>
+      );
+    }
     return (
       <Select
         {...omit(props, Object.keys(propTypes))}
-        loading={loading}
         onChange={this.props.onChange}
       >
         {items.map(item => <Option key={item.value} value={item.value}>{item.label}</Option>)}

@@ -1,36 +1,25 @@
 import React from 'react';
-import { Icon, Divider } from 'antd';
-import { Link } from 'react-router-dom';
 import Table from '../../components/Table';
+import { API } from '../../const';
 
 const columns = [{
-  title: 'Name',
+  title: '姓名',
   dataIndex: 'name',
   key: 'name',
-  render: text => <Link to={`/crawler/task/${text}`}>{text}</Link>,
+  // render: text => <Link to={`/crawler/task/${text}`}>{text}</Link>,
 }, {
-  title: 'Address',
-  dataIndex: 'address',
-  key: 'address',
+  title: '性别',
+  dataIndex: 'gender',
+  key: 'gender',
+  render: text => `${text === '0' ? '女' : '男'}`,
+}, {
+  title: '年龄',
+  dataIndex: 'age',
+  key: 'age',
 }, {
   title: '电话',
   dataIndex: 'phone',
   key: 'phone',
-  render: (text, record) => (record.phone1 ? `${record.phone1} - ${record.phone2}` : record.phone2),
-}, {
-  title: 'Action',
-  key: 'action',
-  render: (text, record) => (
-    <span>
-      <a href="javascript:;">Action 一 {record.name}</a>
-      <Divider type="vertical" />
-      <a href="javascript:;">Delete</a>
-      <Divider type="vertical" />
-      <a href="javascript:;" className="ant-dropdown-link">
-        More actions <Icon type="down" />
-      </a>
-    </span>
-  ),
 }];
 
 
@@ -40,10 +29,10 @@ export default class extends React.Component {
       <div>
         <div className="panel">
           <div className="panel-heading">
-            <h3 className="panel-title">医院网点</h3>
+            <h3 className="panel-title">用户列表</h3>
           </div>
           <div className="panel-body">
-            <Table refreshable rowKey="key" url="http://localhost:8000/queryAllStore" size="small" columns={columns} />
+            <Table autoLoad filterFunc={res => ({ results: { data: JSON.parse(res.data).map(item => ({ key: item.Key, ...item.Record })) } })} refreshable rowKey="key" url={API.Query('User')} size="small" columns={columns} />
           </div>
         </div>
       </div>
